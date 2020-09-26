@@ -1,12 +1,49 @@
-$document.ready(function(){
+var s = function (sketch) {
+    let $ = document.querySelector.bind(document);
+    const colorInput = $('#color');
+    const weightInput = $('#weight');
+    const clearInput = $('#clear');
+    sketch.setup = function(){
+        sketch.createCanvas(window.innerWidth, window.innerHeight);
+        sketch.background(255);
+    };
+    const paths = [];
+    let currentPath = []
+    sketch.draw = function(){
+        sketch.noFill();
+        if (sketch.mouseIsPressed) {
+            const point = {
+                x: sketch.mouseX,
+                y: sketch.mouseY,
+                color: colorInput.value,
+                weight: weightInput.value
+            };
+            currentPath.push(point);
+        }
+        paths.forEach(path => {
+            beginShape();
+            path.forEach(point => {
+               stroke(point.color);
+               strokeWeight(point.weight);
+               vertex(point.x, point.y);
+            });
+            endShape();
+        });
+    };
+    sketch.mousePressed = function(){
+        currentPath = [];
+        paths.push(currentPath);
+    };
+    /*sketch.(clear.addEventListener('click', () => {
+        paths.splice(0);
+        background(255);
+    }));*/
+}
 
-var $ = document.getElementById.bind(document);
+var myp5 = new p5(s);
 
-const color = $('color');
-const weight = $('weight');
-const clear = $('clear');
 
-setup();
+/*setup();
 const paths = [];
 let currentPath = [];
 draw();
@@ -49,6 +86,4 @@ function mousePressed(){
 clear.addEventListener('click', () => {
     paths.splice(0);
     background(255);
-});
-
-});
+});*/
